@@ -12,7 +12,7 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-load("@pybind11_bazel//:build_defs.bzl", "pybind_extension")
+load("@pybind11_bazel//:build_defs.bzl", "pybind_extension", "pybind_library")
 
 package(default_visibility = ["//visibility:public"])
 
@@ -22,6 +22,15 @@ exports_files(
         "version_script.lds",
     ],
     visibility = ["//visibility:private"],
+)
+
+pybind_library(
+    name = "pychannel",
+    hdrs = ["pychannel.h"],
+    visibility = ["//visibility:private"],
+    deps = [
+        "@yacl//yacl/link/transport:channel",
+    ],
 )
 
 pybind_extension(
@@ -37,6 +46,7 @@ pybind_extension(
     }),
     deps = [
         ":exported_symbols.lds",
+        ":pychannel",
         ":version_script.lds",
         "@spulib//libspu:version",
         "@spulib//libspu/compiler:compile",
